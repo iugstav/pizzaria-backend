@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "es5" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    "lib": ["ES2022"],
+    "experimentalDecorators": true /* Enable experimental support for TC39 stage 2 draft decorators. */,
+    "emitDecoratorMetadata": true /* Emit design-type metadata for decorated declarations in source files. */,
+
+    /* Modules */
+    "module": "commonjs" /* Specify what module code is generated. */,
+    /* List of file name suffixes to search when resolving a module. */
+    "resolveJsonModule": true /* Enable importing .json files. */,
+
+    "allowJs": true /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */,
+    "noEmit": true /* Disable emitting files from a compilation. */,
+    /* Interop Constraints */
+    "isolatedModules": false /* Ensure that each file can be safely transpiled without relying on other imports. */,
+    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
+    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+
+    /* Type Checking */
+    "strict": true /* Enable all strict type-checking options. */,
+    "noImplicitAny": true /* Enable error reporting for expressions and declarations with an implied 'any' type. */,
+    "noImplicitThis": true /* Enable error reporting when 'this' is given the type 'any'. */,
+    "alwaysStrict": true /* Ensure 'use strict' is always emitted. */,
+    "strictNullChecks": true,
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+  }
+}

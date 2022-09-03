@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+model Categories {
+  id   String @id @default(uuid())
+  name String @unique()
+
+  pizzas Pizzas[]
+
+  @@map("categories")
+}
+
+model OrderItems {
+  id            String @id @default(uuid())
+  pizza_id      String
+  amount        Int
+  order_id      String
+  customization String
+
+  Orders Orders @relation(fields: [order_id], references: [id])
+
+  @@index([order_id], map: "order_items_order_id_fkey")
+  @@map("order_items")
+}
+
+model Orders {
+  id             String       @id @default(uuid())
+  total_price    Int
+  payment_type   String
+  delivered_date DateTime?
+  order_status   Int
+  created_at     DateTime     @default(now())
+  user_id        String       @db.VarChar(64)
+  order_items    OrderItems[]
+
+  Users Users? @relation(fields: [user_id], references: [id])
+
+  @@map("orders")
+}
+
+model Pizzas {
+  id          String   @id @default(uuid())
+  name        String   @unique(map: "name")
+  price       Float
+  category    String
+  description String?
+  created_at  DateTime @default(now())
+
+  categories Categories @relation(fields: [category], references: [name])
+
+  @@index([category], map: "pizzas_category_fkey")
+  @@map("pizzas")
+}
+
+model addresses {
+  id         String  @id @db.VarChar(64)
+  address1   String  @db.VarChar(255)
+  address2   String? @db.VarChar(255)
+  number     Int
+  complement String? @db.Text
+  state      String  @db.VarChar(60)
+
+  users Users[]
+}
+
+model Users {
+  id         String @id @db.VarChar(64)
+  role       Role   @default(CUSTOMER)
+  first_name String @db.VarChar(16)
+  last_name  String @db.VarChar(16)
+  email      String @unique() @db.VarChar(200)
+  password   String @db.VarChar(100)
+  phone      String @db.Char(15)
+  address_id String @db.VarChar(64)
+
+  addresses addresses? @relation(fields: [address_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "users_ibfk_1")
+  orders    Orders[]
+
+  @@index([address_id], map: "address_id")
+  @@map("users")
+}
