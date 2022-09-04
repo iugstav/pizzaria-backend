@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { decode } from "jsonwebtoken";
+import { verify } from "jsonwebtoken";
 
 type decodedJWT = {
   sub: string;
@@ -10,23 +10,28 @@ export class EnsureAuthenticatedMiddleware {
 
   public async handle(req: Request, res: Response, next: NextFunction) {
     try {
-      const auth = req.headers?.["x-access-token"];
+      const auth = req.headers.authorization;
 
       if (!auth) {
-        return res
-          .status(401)
-          .json({ error: "Without authorization credentials" });
+        // return res
+        //   .status(401)
+        //   .json({ error: "Without authorization credentials" });
+
+        throw new Error("Without authorization credentials");
       }
 
       try {
-        const decodedToken = decode(auth as string) as decodedJWT;
+        const [, token] = auth.split(" ");
+        verify(token, process.env.JWT_SECRET_KEY as string);
 
-        return res.status(200).json({ userId: decodedToken.sub });
+        return next();
       } catch (error: any) {
-        return res.status(403).json({ error: error.message });
+        // return res.status(403).json({ error: "Invalid authorization token"});
+        throw new Error("Invalid authorization token");
       }
     } catch (error) {
-      return res.status(403).json({ error: "Unauthorized resource" });
+      // return res.status(403).json({ error: "Unauthorized resource" });
+      throw new Error("Unauthorized resource");
     }
   }
 }
