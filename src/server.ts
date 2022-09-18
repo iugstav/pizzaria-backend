@@ -1,4 +1,8 @@
 import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import compression from "compression";
+import cookieParser from "cookie-parser";
 import type { Request, Response, NextFunction } from "express";
 
 import { categoriesRouter } from "./modules/Categories/categories.routes";
@@ -11,6 +15,10 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+app.use(helmet());
+app.use(compression());
+app.use(cookieParser());
 
 app.use("/users", usersRouter);
 app.use("/pizzas", pizzasRouter);
