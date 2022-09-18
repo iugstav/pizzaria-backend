@@ -24,6 +24,7 @@ const createOrderController = new CreateOrderController(createOrderService);
 const getAllOrdersController = new GetAllOrdersController(getAllOrdersService);
 const getOrderByIdController = new GetOrderByIdController(getOrderByIdService);
 
+// middlewares
 const ensureAuthenticatedMiddleware = new EnsureAuthenticatedMiddleware();
 
 ordersRouter.use(ensureAuthenticatedMiddleware.handle);

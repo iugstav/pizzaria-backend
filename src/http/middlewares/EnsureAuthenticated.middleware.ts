@@ -1,9 +1,5 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
-
-type decodedJWT = {
-  sub: string;
-};
 
 export class EnsureAuthenticatedMiddleware {
   public constructor() {}
@@ -13,11 +9,9 @@ export class EnsureAuthenticatedMiddleware {
       const auth = req.headers.authorization;
 
       if (!auth) {
-        // return res
-        //   .status(401)
-        //   .json({ error: "Without authorization credentials" });
-
-        throw new Error("Without authorization credentials");
+        return res
+          .status(401)
+          .json({ error: "Without authentication credentials" });
       }
 
       try {
@@ -26,12 +20,10 @@ export class EnsureAuthenticatedMiddleware {
 
         return next();
       } catch (error: any) {
-        // return res.status(403).json({ error: "Invalid authorization token"});
-        throw new Error("Invalid authorization token");
+        return res.status(403).json({ error: "Invalid authentication token" });
       }
     } catch (error) {
-      // return res.status(403).json({ error: "Unauthorized resource" });
-      throw new Error("Unauthorized resource");
+      return res.status(403).json({ error: "Unauthorized resource" });
     }
   }
 }

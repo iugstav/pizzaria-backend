@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { EnsureAuthenticatedMiddleware } from "../../http/middlewares/EnsureAuthenticated.middleware";
+import { EnsureIsAdminMiddleware } from "../../http/middlewares/EnsureIsAdmin.middleware";
 import { CreateCategoryController } from "./controllers/CreateCategory.controller";
 import { DeleteCategoryController } from "./controllers/DeleteCategory.controller";
 import { GetAllCategoriesController } from "./controllers/GetAllCategories.controller";
@@ -37,7 +38,9 @@ const deleteCategoryController = new DeleteCategoryController(
   deleteCategoryService
 );
 
+// middlewares
 const ensureAuthenticatedMiddleware = new EnsureAuthenticatedMiddleware();
+const ensureIsAdminMiddleware = new EnsureIsAdminMiddleware();
 
 categoriesRouter.use(ensureAuthenticatedMiddleware.handle);
 
@@ -48,12 +51,16 @@ categoriesRouter.get("/:id", (req: Request, res: Response) =>
   getCategoryByIdController.handle(req, res)
 );
 
-categoriesRouter.post("/create", (req: Request, res: Response) =>
-  createCategoryController.handle(req, res)
+categoriesRouter.post(
+  "/create",
+  ensureIsAdminMiddleware.handle,
+  (req: Request, res: Response) => createCategoryController.handle(req, res)
 );
 
-categoriesRouter.delete("/delete/:id", (req: Request, res: Response) =>
-  deleteCategoryController.handle(req, res)
+categoriesRouter.delete(
+  "/delete/:id",
+  ensureIsAdminMiddleware.handle,
+  (req: Request, res: Response) => deleteCategoryController.handle(req, res)
 );
 
 export { categoriesRouter };

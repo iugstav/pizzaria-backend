@@ -1,5 +1,5 @@
 import { prismaClient } from "../../../../database/prisma";
-import { Role, User } from "../../User";
+import { Role, RoleType, User } from "../../User";
 import { IUsersRepository } from "../IUsers.repository";
 
 export class PrismaUsersRepository implements IUsersRepository {
@@ -34,6 +34,7 @@ export class PrismaUsersRepository implements IUsersRepository {
               email: properties.email,
               password: properties.password,
               phone: properties.phone,
+              role: properties.role,
             },
           },
         },
@@ -50,6 +51,7 @@ export class PrismaUsersRepository implements IUsersRepository {
         email: properties.email,
         password: properties.password,
         phone: properties.phone,
+        role: properties.role,
         address_id: addressAlreadyExists.id,
       },
     });
@@ -76,6 +78,9 @@ export class PrismaUsersRepository implements IUsersRepository {
       throw new Error("invalid user address");
     }
 
+    const persistenceRole =
+      userInPersistence.role === "CUSTOMER" ? "Customer" : "Admin";
+
     const user = User.create(
       {
         firstName: userInPersistence.first_name,
@@ -91,7 +96,7 @@ export class PrismaUsersRepository implements IUsersRepository {
           state: addresses.state,
           complement: addresses.complement ?? "",
         },
-        role: Role.Customer,
+        role: Role[persistenceRole],
       },
       userInPersistence.id
     );

@@ -30,10 +30,16 @@ export class AuthenticateUserService {
       throw new Error("Invalid email and/or password");
     }
 
-    const token = jwt.sign({}, auth.secret, {
-      subject: user.id,
-      expiresIn: auth.expiresIn,
-    });
+    const token = jwt.sign(
+      {
+        role: String(user.properties.role),
+        id: user.id,
+      },
+      auth.secret,
+      {
+        expiresIn: auth.expiresIn,
+      }
+    );
 
     return {
       token,

@@ -1,11 +1,11 @@
 import { Request, Response, Router } from "express";
 import { EnsureAuthenticatedMiddleware } from "../../http/middlewares/EnsureAuthenticated.middleware";
 import { PrismaOrdersRepository } from "../Order/repositories/implementations/PrismaOrders.repository";
+import { PrismaOrderItemsRepository } from "./repositories/implementations/PrismaOrderItems.repository";
 import { PrismaPizzasRepository } from "../Pizza/repositories/implementations/PrismaPizzas.repository";
 import { CreateOrderItemController } from "./controllers/CreateOrderItem.controller";
 import { GetAllOrderItemsFromOrderController } from "./controllers/GetAllOrderItemsFromOrder.controller";
 import { GetOrderItemByIdController } from "./controllers/GetOrderItemById.controller";
-import { PrismaOrderItemsRepository } from "./repositories/implementations/PrismaOrderItems.repository";
 import { CreateOrderItemService } from "./services/CreateOrderItem.service";
 import { GetAllOrderItemsFromOrderService } from "./services/GetAllOrderItemsFromOrder.service";
 import { GetOrderItemByIdService } from "./services/GetOrderItemById.service";
@@ -40,6 +40,7 @@ const createOrderItemController = new CreateOrderItemController(
   createOrderItemService
 );
 
+// middlewares
 const ensureAuthenticatedMiddleware = new EnsureAuthenticatedMiddleware();
 
 orderItemsRouter.use(ensureAuthenticatedMiddleware.handle);

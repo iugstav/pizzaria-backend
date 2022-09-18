@@ -65,7 +65,7 @@ export class CreateUserService {
           state,
           complement,
         },
-        role: Role[typedRole] ?? Role.Customer,
+        role: Role[typedRole], // "Customer" or "Admin"
       },
       userId
     );
