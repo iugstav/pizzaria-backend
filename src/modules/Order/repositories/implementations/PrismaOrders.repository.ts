@@ -7,7 +7,7 @@ import { OrderItem } from "../../../OrderItems/Orderitem";
 export class PrismaOrdersRepository implements IOrdersRepository {
   public constructor() {}
 
-  async save({ id, properties }: Order): Promise<void> {
+  async save({ id, properties }: Order, user_id: string): Promise<void> {
     await prismaClient.orders.create({
       data: {
         id: id,
@@ -16,6 +16,20 @@ export class PrismaOrdersRepository implements IOrdersRepository {
         delivered_date: null,
         total_price: properties.total_price,
         created_at: properties.created_at,
+        user_id,
+
+        order_items: {
+          createMany: {
+            data: properties.order_items.map((orderItem) => {
+              return {
+                id: orderItem.id,
+                amount: orderItem.properties.amount,
+                customization: orderItem.properties.customization,
+                pizza_id: orderItem.properties.pizza_id,
+              };
+            }),
+          },
+        },
       },
     });
   }

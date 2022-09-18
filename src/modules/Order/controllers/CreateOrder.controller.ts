@@ -13,6 +13,7 @@ export class CreateOrderController {
         order_status,
         created_at,
         order_items,
+        user_id,
       } = req.body;
 
       if (
@@ -21,7 +22,8 @@ export class CreateOrderController {
         !payment_type ||
         !order_status ||
         !created_at ||
-        !order_items
+        !order_items ||
+        !user_id
       ) {
         return res.status(400).json({ error: "Invalid request body." });
       }
@@ -33,6 +35,7 @@ export class CreateOrderController {
         order_status,
         created_at,
         order_items,
+        user_id,
       });
 
       return res.status(200).json({ message: "Pedido criado" });

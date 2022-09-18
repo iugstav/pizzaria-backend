@@ -8,6 +8,7 @@ type CreateOrderRequest = {
   payment_type: string;
   order_status: number;
   created_at: Date;
+  user_id: string;
 
   // i'll type it later
   order_items: any[];
@@ -23,6 +24,7 @@ export class CreateOrderService {
     order_status,
     created_at,
     order_items,
+    user_id,
   }: CreateOrderRequest) {
     if (total_price <= 0) {
       throw new Error("O pedido precisa ter um valor acima de 0.");
@@ -40,7 +42,7 @@ export class CreateOrderService {
       id
     );
 
-    await this.ordersRepository.save(newOrder);
+    await this.ordersRepository.save(newOrder, user_id);
 
     return true;
   }
