@@ -10,7 +10,7 @@ let ordersRepository: InMemoryOrdersRepository;
 let createOrderService: CreateOrderService;
 
 describe("Create Order service", () => {
-  beforeAll(() => {
+  beforeEach(() => {
     ordersRepository = new InMemoryOrdersRepository();
     createOrderService = new CreateOrderService(ordersRepository);
   });
