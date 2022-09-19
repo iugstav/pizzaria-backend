@@ -7,6 +7,8 @@ import request from "supertest";
 import { prismaClient } from "../../../database/prisma";
 import { authenticateAdminUser } from "../../../test/utils/AuthenticateUser";
 
+const { token } = authenticateAdminUser();
+
 describe("Create pizza controller", () => {
   beforeAll(async () => {
     await prismaClient.categories.createMany({
@@ -15,17 +17,10 @@ describe("Create pizza controller", () => {
   });
 
   afterAll(async () => {
-    const deleteCategories = prismaClient.categories.deleteMany();
-    const deletePizzas = prismaClient.pizzas.deleteMany();
-
-    await prismaClient.$transaction([deletePizzas, deleteCategories]);
-
     await prismaClient.$disconnect();
   });
 
   it("Should be able to create a new pizza", async () => {
-    const { token } = authenticateAdminUser();
-
     const response = await request(app)
       .post("/pizzas/create")
       .set("Authorization", `Bearer ${token}`)
@@ -39,5 +34,23 @@ describe("Create pizza controller", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({ message: "Pizza criada" });
+  });
+
+  it("Should not be able to create a new pizza with invalid body", async () => {
+    const response = await request(app)
+      .post("/pizzas/create")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        name: "Pizza de Carne Seca",
+        // missing price field
+        category: "Pizzas Salgadas",
+        description: "a",
+        created_at: new Date().toString(),
+      });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toStrictEqual({
+      error: "Invalid request body.",
+    });
   });
 });
