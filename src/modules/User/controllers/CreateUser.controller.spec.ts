@@ -6,6 +6,7 @@ import { app } from "../../../server";
 import request from "supertest";
 import { prismaClient } from "../../../database/prisma";
 import { Role } from "../User";
+import { randomUUID } from "crypto";
 
 describe("Create User controller (e2e)", () => {
   afterAll(async () => {
@@ -21,7 +22,7 @@ describe("Create User controller (e2e)", () => {
         email: "johndoe10@mail.com",
         password: "johndoe123",
         address: {
-          id: "1",
+          id: randomUUID(),
           address1: "Rua Gilberto Machado, Cachoeiro de Itapemirim",
           number: 453,
           state: "Espírito Santo",

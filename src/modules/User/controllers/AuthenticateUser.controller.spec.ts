@@ -52,4 +52,16 @@ describe("Authenticate User controller (e2e)", () => {
       })
     );
   });
+
+  it("Should not be able to authenticate an user with invalid body", async () => {
+    const response = await request(app).post("/users/login").send({
+      email: "doejohn@somemail.com",
+      // missing password field
+    });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toStrictEqual({
+      error: "invalid request body",
+    });
+  });
 });
