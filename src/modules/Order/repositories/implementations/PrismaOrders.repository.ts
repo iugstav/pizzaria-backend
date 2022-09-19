@@ -8,6 +8,15 @@ export class PrismaOrdersRepository implements IOrdersRepository {
   public constructor() {}
 
   async save({ id, properties }: Order, user_id: string): Promise<void> {
+    const mappedOrderItems = properties.order_items.map((orderItem) => {
+      return {
+        id: orderItem.id,
+        amount: orderItem.properties.amount,
+        customization: orderItem.properties.customization,
+        pizza_id: orderItem.properties.pizza_id,
+      };
+    });
+
     await prismaClient.orders.create({
       data: {
         id: id,
@@ -20,14 +29,7 @@ export class PrismaOrdersRepository implements IOrdersRepository {
 
         order_items: {
           createMany: {
-            data: properties.order_items.map((orderItem) => {
-              return {
-                id: orderItem.id,
-                amount: orderItem.properties.amount,
-                customization: orderItem.properties.customization,
-                pizza_id: orderItem.properties.pizza_id,
-              };
-            }),
+            data: mappedOrderItems,
           },
         },
       },
@@ -92,6 +94,17 @@ export class PrismaOrdersRepository implements IOrdersRepository {
       },
       order.id
     );
+  }
+
+  async changeOrderStatus(id: string, newOrderStatus: number): Promise<void> {
+    await prismaClient.orders.update({
+      data: {
+        order_status: newOrderStatus,
+      },
+      where: {
+        id,
+      },
+    });
   }
 
   async delete(id: string): Promise<void> {

@@ -24,6 +24,15 @@ export class InMemoryOrdersRepository implements IOrdersRepository {
     return order;
   }
 
+  public async changeOrderStatus(
+    id: string,
+    newOrderStatus: number
+  ): Promise<void> {
+    const order = this.orders.find((order) => order.id === id);
+
+    order!.properties.order_status = newOrderStatus;
+  }
+
   public async delete(id: string): Promise<void> {
     const orderIndex = this.orders.findIndex((order) => order.id === id);
 
