@@ -5,6 +5,7 @@
 import { app } from "../../../server";
 import request from "supertest";
 import { prismaClient } from "../../../database/prisma";
+import { authenticateAdminUser } from "../../../test/utils/AuthenticateUser";
 
 describe("Create pizza controller", () => {
   beforeAll(async () => {
@@ -23,13 +24,18 @@ describe("Create pizza controller", () => {
   });
 
   it("Should be able to create a new pizza", async () => {
-    const response = await request(app).post("/pizzas/create").send({
-      name: "Pizza de Frango",
-      price: 35.0,
-      category: "Pizzas Salgadas",
-      description: "a",
-      created_at: new Date(),
-    });
+    const { token } = authenticateAdminUser();
+
+    const response = await request(app)
+      .post("/pizzas/create")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        name: "Pizza de Frango",
+        price: 35.0,
+        category: "Pizzas Salgadas",
+        description: "a",
+        created_at: new Date().toString(),
+      });
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({ message: "Pizza criada" });
