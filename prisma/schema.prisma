@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -28,9 +28,9 @@ model OrderItems {
   order_id      String
   customization String
 
-  Orders Orders @relation(fields: [order_id], references: [id])
+  orders Orders @relation(fields: [order_id], references: [id])
 
-  @@index([order_id], map: "order_items_order_id_fkey")
+  @@index([order_id], map: "order_item_order_id_fkey")
   @@map("order_items")
 }
 
@@ -59,7 +59,7 @@ model Pizzas {
 
   categories Categories @relation(fields: [category], references: [name])
 
-  @@index([category], map: "pizzas_category_fkey")
+  @@index([category], map: "pizza_category_fkey")
   @@map("pizzas")
 }
 
