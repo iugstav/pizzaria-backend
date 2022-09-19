@@ -46,6 +46,7 @@ export class CreateUserService {
     const addressId = randomUUID();
     const userId = randomUUID();
     const hashedPassword = await bcrypt.hash(data.password, 8);
+    // Convert string role to a key of the enum Role
     const typedRole = data.role as RoleType;
 
     const { address1, address2, number, state, complement } = data.address;
