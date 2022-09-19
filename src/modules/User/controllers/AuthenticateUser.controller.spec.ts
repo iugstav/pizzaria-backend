@@ -1,3 +1,7 @@
+/**
+ * @jest-environment ./prisma/prisma-test-environment.js
+ */
+
 import request from "supertest";
 import { randomUUID } from "crypto";
 
@@ -37,7 +41,7 @@ describe("Authenticate User controller (e2e)", () => {
 
   it("Should be able to authenticate an user", async () => {
     const response = await request(app).post("/users/login").send({
-      email: "johndoe10@mail.com",
+      email: "doejohn@somemail.com",
       password: "password000111",
     });
 
