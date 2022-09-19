@@ -22,7 +22,7 @@ export class CreateUserController {
       }
 
       //TODO: CREATE DTO WITH CLASS-VALIDATOR
-      const service = await this.createUserService.execute({
+      await this.createUserService.execute({
         firstName,
         lastName,
         email,
@@ -32,7 +32,7 @@ export class CreateUserController {
         address,
       });
 
-      return res.status(200).json({ value: service });
+      return res.status(201).json({ message: "Created" });
     } catch (err: any) {
       console.error(err);
       return res.status(500).json({ error: err.message });
