@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto";
+import { OrderItem } from "../../OrderItems/Orderitem";
 import { Order } from "../Order";
 import { IOrdersRepository } from "../repositories/IOrders.repository";
 
@@ -11,7 +11,7 @@ type CreateOrderRequest = {
   user_id: string;
 
   // i'll type it later
-  order_items: any[];
+  order_items: OrderItem[];
 };
 
 export class CreateOrderService {

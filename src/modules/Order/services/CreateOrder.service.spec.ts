@@ -35,6 +35,7 @@ describe("Create Order service", () => {
       payment_type: order.properties.payment_type,
       order_items: order.properties.order_items,
       created_at: order.properties.created_at,
+      user_id: "usuario123",
     });
 
     expect(await ordersRepository.getById(order.id)).toEqual(order);
@@ -61,6 +62,7 @@ describe("Create Order service", () => {
         payment_type: order.properties.payment_type,
         order_items: order.properties.order_items,
         created_at: order.properties.created_at,
+        user_id: "usuario123",
       })
     ).rejects.toEqual(new Error("O pedido precisa ter um valor acima de 0."));
   });
