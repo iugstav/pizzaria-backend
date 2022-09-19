@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 
-import { PrismaPizzasRepository } from "../repositories/implementations/PrismaPizzas.repository";
 import { RemovePizzaService } from "../services/RemovePizza.service";
 
 export class RemovePizzaController {
