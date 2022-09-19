@@ -14,9 +14,11 @@ interface CreateUserServiceRequest {
   address: Omit<Address, "id">;
 }
 
+// Regular expression for email validation.
 const EMAIL_REGEX =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+// Regular expression for phone validation.
 const PHONE_REGEX = /(\(?\d{2}\)?\s)?(\d{4,5}\-\d{4})/;
 
 export class CreateUserService {
@@ -46,8 +48,9 @@ export class CreateUserService {
     const addressId = randomUUID();
     const userId = randomUUID();
     const hashedPassword = await bcrypt.hash(data.password, 8);
+
     // Convert string role to a key of the enum Role
-    const typedRole = data.role as RoleType;
+    const typedRole = data.role as RoleType; // "Customer" | "Admin"
 
     const { address1, address2, number, state, complement } = data.address;
 
@@ -66,7 +69,7 @@ export class CreateUserService {
           state,
           complement,
         },
-        role: Role[typedRole], // "Customer" or "Admin"
+        role: Role[typedRole],
       },
       userId
     );
