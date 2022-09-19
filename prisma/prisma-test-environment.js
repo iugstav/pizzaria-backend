@@ -17,13 +17,27 @@ class PrismaTestEnvironment extends NodeEnvironment {
   }
 
   async setup() {
+    process.env.DATABASE_URL = this.connectionString
+    this.global.process.env.DATABASE_URL = this.connectionString
 
     // Rodar as migrations
     execSync(`${prismaBinary} migrate deploy --preview-feature`);
+
+    return super.setup();
   }
 
   async teardown() {
+    const client = mysql.createConnection({
+      host: process.env.DATABASE_HOST,
+      user: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME
+    })
 
+    client.connect();
+    client.query(`DROP DATABASE IF EXISTS ${process.env.DATABASE_NAME}`);
+    client.query(`CREATE DATABASE ${process.env.DATABASE_NAME}`);
+    client.end()
 
     await super.teardown();
   }
