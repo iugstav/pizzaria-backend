@@ -1,6 +1,6 @@
 import { Order } from "../Order";
 import { InMemoryOrdersRepository } from "../repositories/implementations/in-memory/InMemoryOrders.repository";
-import { GetOrderByIdService } from "./GetOrderById.service";
+import { GetOrderByIdService, OrderResponse } from "./GetOrderById.service";
 
 let ordersRepository: InMemoryOrdersRepository;
 let getOrderByIdService: GetOrderByIdService;
@@ -26,7 +26,27 @@ describe("Get Order By Id service", () => {
 
     await ordersRepository.save(order);
 
-    await expect(getOrderByIdService.execute(order.id)).resolves.toEqual(order);
+    const response: OrderResponse = {
+      id: order.id,
+      total_price: order.properties.total_price,
+      payment_type: order.properties.payment_type,
+      order_status: order.properties.order_status,
+      delivered_date: order.properties.delivered_date,
+      created_at: order.properties.created_at,
+      order_items: order.properties.order_items.map((orderItem) => {
+        return {
+          id: orderItem.id,
+          pizza_id: orderItem.properties.pizza_id,
+          order_id: orderItem.properties.order_id,
+          amount: orderItem.properties.amount,
+          customization: orderItem.properties.customization,
+        };
+      }),
+    };
+
+    await expect(getOrderByIdService.execute(order.id)).resolves.toEqual(
+      response
+    );
   });
 
   it("Should not be able to retrieve an order by it's id with invalid id", async () => {
