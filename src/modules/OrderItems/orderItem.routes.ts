@@ -48,7 +48,7 @@ orderItemsRouter.use(ensureAuthenticatedMiddleware.handle);
 orderItemsRouter.get("/:orderId/all", (req: Request, res: Response) =>
   getAllOrderItemsFromOrderController.handle(req, res)
 );
-orderItemsRouter.get("/:id", (req: Request, res: Response) =>
+orderItemsRouter.get("/:id/details", (req: Request, res: Response) =>
   getOrderItemByIdController.handle(req, res)
 );
 

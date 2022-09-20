@@ -31,12 +31,15 @@ export class PrismaOrderItemsRepository implements IOrderItemsRepository {
     }
 
     return orderItems.map((orderItem) =>
-      OrderItem.create({
-        pizza_id: orderItem.pizza_id,
-        order_id: orderItem.order_id,
-        amount: orderItem.amount,
-        customization: orderItem.customization,
-      })
+      OrderItem.create(
+        {
+          pizza_id: orderItem.pizza_id,
+          order_id: orderItem.order_id,
+          amount: orderItem.amount,
+          customization: orderItem.customization,
+        },
+        orderItem.id
+      )
     );
   }
 
@@ -51,11 +54,14 @@ export class PrismaOrderItemsRepository implements IOrderItemsRepository {
       throw new Error("Item do pedido não encontrado.");
     }
 
-    return OrderItem.create({
-      pizza_id: orderItem.pizza_id,
-      order_id: orderItem.order_id,
-      amount: orderItem.amount,
-      customization: orderItem.customization,
-    });
+    return OrderItem.create(
+      {
+        pizza_id: orderItem.pizza_id,
+        order_id: orderItem.order_id,
+        amount: orderItem.amount,
+        customization: orderItem.customization,
+      },
+      orderItem.id
+    );
   }
 }
