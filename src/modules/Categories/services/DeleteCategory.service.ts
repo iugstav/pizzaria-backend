@@ -6,6 +6,6 @@ export class DeleteCategoryService {
   public async execute(id: string) {
     await this.categoriesRepository.delete(id);
 
-    return true;
+    return;
   }
 }

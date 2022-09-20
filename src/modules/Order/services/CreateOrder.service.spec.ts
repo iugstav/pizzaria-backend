@@ -1,3 +1,4 @@
+import { OrderItem } from "../../OrderItems/Orderitem";
 import { InMemoryOrderItemsRepository } from "../../OrderItems/repositories/implementations/in-memory/InMemoryOrderItems.repository";
 import { InMemoryPizzasRepository } from "../../Pizza/repositories/implementations/in-memory/InMemoryPizzas.repository";
 import { Order } from "../Order";
@@ -28,12 +29,22 @@ describe("Create Order service", () => {
       "order123"
     );
 
+    const mappedOrderItems = order.properties.order_items.map((orderItem) => {
+      return {
+        id: orderItem.id,
+        pizza_id: orderItem.properties.pizza_id,
+        order_id: orderItem.properties.order_id,
+        amount: orderItem.properties.amount,
+        customization: orderItem.properties.customization,
+      };
+    });
+
     await createOrderService.execute({
       id: order.id,
       order_status: order.properties.order_status,
       total_price: order.properties.total_price,
       payment_type: order.properties.payment_type,
-      order_items: order.properties.order_items,
+      order_items: mappedOrderItems,
       created_at: order.properties.created_at,
       user_id: "usuario123",
     });
@@ -60,7 +71,7 @@ describe("Create Order service", () => {
         order_status: order.properties.order_status,
         total_price: order.properties.total_price,
         payment_type: order.properties.payment_type,
-        order_items: order.properties.order_items,
+        order_items: [],
         created_at: order.properties.created_at,
         user_id: "usuario123",
       })

@@ -10,7 +10,7 @@ export class DeleteCategoryController {
 
       await this.deleteCategoryService.execute(id);
 
-      return res.status(200).json({ success: true });
+      return res.status(204).json();
     } catch (err: any) {
       console.error(err);
       return res.status(500).json({ error: err.message });

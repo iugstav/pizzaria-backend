@@ -6,7 +6,7 @@ import { DeleteCategoryService } from "./DeleteCategory.service";
 let categoriesRepository: ICategoriesRepository;
 let deleteCategoryService: DeleteCategoryService;
 
-describe("Delete category Service", () => {
+describe("Delete Category Service", () => {
   beforeAll(() => {
     categoriesRepository = new InMemoryCategoriesRepository();
     deleteCategoryService = new DeleteCategoryService(categoriesRepository);
@@ -24,7 +24,6 @@ describe("Delete category Service", () => {
 
     const service = await deleteCategoryService.execute(category.id);
 
-    expect(service).toBeTruthy();
     expect(await categoriesRepository.exists(category.id)).toBeFalsy();
     expect((await categoriesRepository.getAll()).length).toBe(0);
   });

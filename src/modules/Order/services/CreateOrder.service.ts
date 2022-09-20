@@ -2,6 +2,14 @@ import { OrderItem } from "../../OrderItems/Orderitem";
 import { Order } from "../Order";
 import { IOrdersRepository } from "../repositories/IOrders.repository";
 
+type CreateOrderOrderItem = {
+  id: string;
+  pizza_id: string;
+  order_id: string;
+  amount: number;
+  customization: string;
+};
+
 type CreateOrderRequest = {
   id: string;
   total_price: number;
@@ -10,8 +18,7 @@ type CreateOrderRequest = {
   created_at: Date;
   user_id: string;
 
-  // i'll type it later
-  order_items: OrderItem[];
+  order_items: CreateOrderOrderItem[];
 };
 
 export class CreateOrderService {
@@ -30,20 +37,34 @@ export class CreateOrderService {
       throw new Error("O pedido precisa ter um valor acima de 0.");
     }
 
+    const mappedOrderItems = order_items.map((orderItem) => {
+      return OrderItem.create(
+        {
+          pizza_id: orderItem.pizza_id,
+          order_id: orderItem.order_id,
+          amount: orderItem.amount,
+          customization: orderItem.customization,
+        },
+        orderItem.id
+      );
+    });
+
     const newOrder = Order.create(
       {
         total_price,
         payment_type,
         order_status,
-        order_items,
+        order_items: mappedOrderItems,
         created_at,
         delivered_date: null,
       },
       id
     );
 
+    console.log(newOrder.properties.order_items);
+
     await this.ordersRepository.save(newOrder, user_id);
 
-    return true;
+    return;
   }
 }

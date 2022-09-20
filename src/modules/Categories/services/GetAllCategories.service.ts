@@ -6,6 +6,14 @@ export class GetAllCategoriesService {
   public async execute() {
     const categories = await this.categoriesRepository.getAll();
 
-    return categories;
+    const formattedCategories = categories.map((category) => {
+      return {
+        id: category.id,
+        name: category.properties.name,
+        pizzas: category.properties.pizzas ?? [],
+      };
+    });
+
+    return formattedCategories;
   }
 }

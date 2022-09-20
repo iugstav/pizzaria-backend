@@ -20,7 +20,7 @@ export class CreateOrderController {
         !id ||
         !total_price ||
         !payment_type ||
-        !order_status ||
+        !order_status === undefined ||
         !created_at ||
         !order_items ||
         !user_id
@@ -38,7 +38,7 @@ export class CreateOrderController {
         user_id,
       });
 
-      return res.status(200).json({ message: "Pedido criado" });
+      return res.status(201).json({ message: "Pedido criado" });
     } catch (err: any) {
       console.error(err);
       return res.status(500).json({ error: err.message });
