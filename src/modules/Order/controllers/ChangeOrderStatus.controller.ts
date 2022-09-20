@@ -21,7 +21,7 @@ export class ChangeOrderStatusController {
         newOrderStatus,
       });
 
-      return res.status(204);
+      return res.status(204).json();
     } catch (error: any) {
       return res.status(500).json({ error: error.message });
     }

@@ -10,11 +10,11 @@ export class GetAllOrderItemsFromOrderController {
     try {
       const { orderId } = req.params;
 
-      const orderItem = await this.getAllOrderItemsFromOrderService.execute(
+      const orderItems = await this.getAllOrderItemsFromOrderService.execute(
         orderId
       );
 
-      return res.status(200).json({ orderItem });
+      return res.status(200).json({ orderItems });
     } catch (err: any) {
       console.error(err);
       return res.status(500).json({ error: err.message });
